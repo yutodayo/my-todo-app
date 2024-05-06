@@ -14,9 +14,16 @@ const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState('');
 
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    addTodo();
+  };
+
   const addTodo = () => {
-    setTodos([...todos, { id: Date.now(), text: input, isEditing: false, isCompleted: false }]);
-    setInput('');
+    if (input.trim()) {
+      setTodos([...todos, { id: Date.now(), text: input, isEditing: false, isCompleted: false }]);
+      setInput('');
+    }
   };
 
   const complete = (id: number) => {
@@ -41,7 +48,7 @@ const TodoList: React.FC = () => {
 
   return (
     <div>
-        <Box component="form" sx={{ p: '2px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: 400, bgcolor: 'white'}}>
+        <Box component="form" sx={{ p: '2px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: 400, bgcolor: 'white'}} onSubmit={submit}>
             <InputBase placeholder='すること' value={input} onChange={(e) => setInput(e.target.value)} sx={{ ml: 1, flex: 1}}/>
             <IconButton type="button" sx={{ p: '10px' }} onClick={addTodo}>
                 <AddCircleOutlineIcon />
