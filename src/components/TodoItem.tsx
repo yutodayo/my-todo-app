@@ -3,6 +3,7 @@ import { Card, TextField, Checkbox, IconButton, Typography, Box } from '@mui/mat
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface TodoItemProps {
   todo: {
@@ -15,9 +16,10 @@ interface TodoItemProps {
   edit: (id: number) => void;
   cancel: (id: number) => void;
   save: (id: number, newText: string) => void;
+  deleteItem: (id: number) => void;
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ todo, complete, edit, cancel, save }) => {
+const TodoItem: React.FC<TodoItemProps> = ({ todo, complete, edit, cancel, save, deleteItem }) => {
   const [editText, setEditText] = useState(todo.text);
 
   return (
@@ -35,7 +37,10 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, complete, edit, cancel, save 
             <IconButton onClick={() => cancel(todo.id)}><CancelIcon /></IconButton>
           </>
         ) : (
-          <IconButton onClick={() => edit(todo.id)}><EditIcon /></IconButton>
+          <>
+            <IconButton onClick={() => edit(todo.id)}><EditIcon /></IconButton>
+            <IconButton onClick={() => deleteItem(todo.id)}><DeleteIcon /></IconButton>
+          </>
         )}
       </div>
     </Box>
