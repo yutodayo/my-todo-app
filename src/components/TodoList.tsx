@@ -14,9 +14,16 @@ const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState('');
 
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    addTodo();
+  };
+
   const addTodo = () => {
-    setTodos([...todos, { id: Date.now(), text: input, isEditing: false, isCompleted: false }]);
-    setInput('');
+    if (input.trim()) {
+      setTodos([...todos, { id: Date.now(), text: input, isEditing: false, isCompleted: false }]);
+      setInput('');
+    }
   };
 
   const complete = (id: number) => {
@@ -35,9 +42,13 @@ const TodoList: React.FC = () => {
     setTodos(todos.map(todo => todo.id === id ? { ...todo, text: newText, isEditing: false } : todo));
   };
 
+  const deleteItem = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
   return (
     <div>
-        <Box component="form" sx={{ p: '2px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: 400, bgcolor: 'white'}}>
+        <Box component="form" sx={{ p: '2px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: 400, bgcolor: 'white'}} onSubmit={submit}>
             <InputBase placeholder='すること' value={input} onChange={(e) => setInput(e.target.value)} sx={{ ml: 1, flex: 1}}/>
             <IconButton type="button" sx={{ p: '10px' }} onClick={addTodo}>
                 <AddCircleOutlineIcon />
@@ -46,7 +57,7 @@ const TodoList: React.FC = () => {
       {todos.map((todo) => (
         <Grid container>
             <Grid item xs={12} md={8} lg={4}>
-                <TodoItem key={todo.id} todo={todo} complete={complete} edit={edit} cancel={cancel} save={save} />
+                <TodoItem key={todo.id} todo={todo} complete={complete} edit={edit} cancel={cancel} save={save} deleteItem={deleteItem} />
             </Grid>
         </Grid>
       ))}
